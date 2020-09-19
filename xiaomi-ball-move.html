@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrapper {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      height: 600px;
+      background-color: burlywood;
+    }
+
+    .ball {
+      position: absolute;
+      top: 50px;
+      width: 44px;
+      height: 44px;
+      background-color: blue;
+      border-radius: 50%;
+    }
+    .action {
+      transition: all 1s linear;
+    }
+    .ball-left {
+      left: 30px;
+    }
+    .ball-light {
+      left: 50%;
+      top: 10px;
+      margin-left: -44px;
+      width: 88px;
+      height: 88px;
+      background-color: #fff;
+      box-shadow: 0 0 40px #fff;
+    }
+
+    .ball-right {
+      right: 30px;
+    }
+
+    .ball-hidden {
+      right: -44px;
+      top: 70px;
+    }
+
+    .b1 {
+      transform: translate(-75px, 40px);
+    }
+    .b2 {
+      transform: translate(-113.5px, -40px);
+      width: 88px;
+      height: 88px;
+      background-color: #fff;
+      box-shadow: 0 0 40px #fff;
+    }
+    .bl {
+      width: 44px;
+      height: 44px;
+      transform: translate(-113.5px, 40px);
+      background-color: blue;
+      box-shadow: none;
+    }
+    .bh {
+      transform: translate(-75px, -20px);
+    }
+  </style>
+  <body>
+    <div id="root">
+      <div class="wrapper">
+        <div
+          @transitionend="transitionend"
+          :class="['ball', 'ball-left', action?'action':'', active.b1?'b1':'']"
+        ></div>
+        <div
+          :class="['ball', 'ball-light', action?'action':'', active.bl?'bl':'']"
+        ></div>
+        <div
+          :class="['ball','ball-right' ,action?'action':'', active.b2?'b2':'']"
+        ></div>
+        <div
+          :class="['ball' ,'ball-hidden' ,action?'action':'', active.bh?'bh':'']"
+        ></div>
+      </div>
+      <button @click="handlePlayer">player</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      const vm = new Vue({
+        el: "#root",
+        data: {
+          active: {
+            b1: false,
+            bl: false,
+            b2: false,
+            bh: false,
+          },
+          action: true,
+        },
+        methods: {
+          transitionend(e) {
+            console.log(e.target);
+            this.action = false;
+            for (const prop in this.active) {
+              this.active[prop] = false;
+            }
+          },
+          handlePlayer() {
+            console.log("player");
+            this.action = true;
+            for (const prop in this.active) {
+              this.active[prop] = true;
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
