@@ -19,56 +19,65 @@
       background-color: burlywood;
     }
 
-    .ball {
+    .wrapper .box {
       position: absolute;
       top: 50px;
+    }
+
+    .wrapper .left {
+      left: -4px;
+    }
+
+    .wrapper .light {
+      left: 50%;
+      top: 10px;
+      margin-left: -44px;
+    }
+
+    .wrapper .right {
+      right: -4px;
+    }
+
+    .wrapper .hidden {
+      right: -44px;
+      top: 70px;
+    }
+
+    .wrapper .box .ball {
+      margin: 0 auto;
       width: 44px;
       height: 44px;
       background-color: blue;
       border-radius: 50%;
     }
-    .action {
-      transition: all 1s linear;
-    }
-    .ball-left {
-      left: 30px;
-    }
-    .ball-light {
-      left: 50%;
-      top: 10px;
-      margin-left: -44px;
+
+    .wrapper .box .ball-light {
       width: 88px;
       height: 88px;
       background-color: #fff;
       box-shadow: 0 0 40px #fff;
     }
 
-    .ball-right {
-      right: 30px;
-    }
-
-    .ball-hidden {
-      right: -44px;
-      top: 70px;
+    .wrapper .box .action {
+      transition: all 1s linear;
     }
 
     .b1 {
       transform: translate(-75px, 40px);
     }
-    .b2 {
-      transform: translate(-113.5px, -40px);
-      width: 88px;
-      height: 88px;
-      background-color: #fff;
-      box-shadow: 0 0 40px #fff;
-    }
     .bl {
-      width: 44px;
-      height: 44px;
-      transform: translate(-113.5px, 40px);
+      transform-origin: left top;
+      transform: translate(-113.5px, 40px) scale(0.5);
       background-color: blue;
       box-shadow: none;
     }
+    .b2 {
+      transform-origin: right top;
+      transform: translate(-113.5px, -40px) scale(2);
+      background-color: #fff;
+      box-shadow: 0 0 40px #fff;
+    }
+
     .bh {
       transform: translate(-75px, -20px);
     }
@@ -76,19 +85,30 @@
   <body>
     <div id="root">
       <div class="wrapper">
-        <div
-          @transitionend="transitionend"
-          :class="['ball', 'ball-left', action?'action':'', active.b1?'b1':'']"
-        ></div>
-        <div
-          :class="['ball', 'ball-light', action?'action':'', active.bl?'bl':'']"
-        ></div>
-        <div
-          :class="['ball','ball-right' ,action?'action':'', active.b2?'b2':'']"
-        ></div>
-        <div
-          :class="['ball' ,'ball-hidden' ,action?'action':'', active.bh?'bh':'']"
-        ></div>
+        <div class="box left">
+          <div
+            @transitionend="transitionend"
+            :class="['ball', 'ball-left', action?'action':'', action?'b1':'']"
+          ></div>
+          <div class="content">你是不是饿得慌</div>
+        </div>
+        <div class="box light">
+          <div
+            :class="['ball', 'ball-light', action?'action':'', action?'bl':'']"
+          ></div>
+          <div class="main"></div>
+        </div>
+        <div class="box right">
+          <div
+            :class="['ball','ball-right' ,action?'action':'', action?'b2':'']"
+          ></div>
+          <div class="content">你是不是饿得慌</div>
+        </div>
+        <div class="box hidden">
+          <div
+            :class="['ball' ,'ball-hidden' ,action?'action':'', action?'bh':'']"
+          ></div>
+        </div>
       </div>
       <button @click="handlePlayer">player</button>
     </div>
@@ -97,28 +117,15 @@
       const vm = new Vue({
         el: "#root",
         data: {
-          active: {
-            b1: false,
-            bl: false,
-            b2: false,
-            bh: false,
-          },
-          action: true,
+          action: false,
         },
         methods: {
           transitionend(e) {
-            console.log(e.target);
             this.action = false;
-            for (const prop in this.active) {
-              this.active[prop] = false;
-            }
           },
           handlePlayer() {
             console.log("player");
             this.action = true;
-            for (const prop in this.active) {
-              this.active[prop] = true;
-            }
           },
         },
       });
