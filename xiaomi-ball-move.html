@@ -25,22 +25,26 @@
     }
 
     .wrapper .left {
-      left: -4px;
+      width: 140px;
+      text-align: center;
+      left: 2px;
     }
 
     .wrapper .light {
       left: 50%;
       top: 10px;
-      margin-left: -44px;
+      transform: translateX(-50%);
     }
 
     .wrapper .right {
-      right: -4px;
+      width: 140px;
+      right: 2px;
+      text-align: center;
     }
 
     .wrapper .hidden {
       right: -44px;
-      top: 70px;
+      top: 90px;
     }
 
     .wrapper .box .ball {
@@ -62,24 +66,72 @@
       transition: all 1s linear;
     }
 
-    .b1 {
-      transform: translate(-75px, 40px);
+    .wrapper .box .b1 {
+      transform: translate(-95px, 40px);
     }
-    .bl {
+    .wrapper .box .bl {
       transform-origin: left top;
-      transform: translate(-113.5px, 40px) scale(0.5);
+      transform: translate(-93.5px, 40px) scale(0.5);
       background-color: blue;
       box-shadow: none;
     }
-    .b2 {
+    .wrapper .box .b2 {
       transform-origin: right top;
-      transform: translate(-113.5px, -40px) scale(2);
+      transform: translate(-93.5px, -40px) scale(2);
       background-color: #fff;
       box-shadow: 0 0 40px #fff;
     }
 
-    .bh {
-      transform: translate(-75px, -20px);
+    .wrapper .box .bh {
+      transform: translate(-95px, -40px);
+    }
+
+    .content {
+      margin-top: 20px;
+    }
+
+    .wrapper .box .main .tab {
+      margin: 4px auto 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: red;
+    }
+
+    .wrapper .box .main .vertical-line {
+      width: 0px;
+      height: 70px;
+      border-right: 1px dashed #fff;
+      margin: 0 auto;
+    }
+
+    .wrapper .box .main .kuang .top {
+      width: 150px;
+      height: 50px;
+      background-color: thistle;
+      line-height: 50px;
+      text-align: center;
+    }
+
+    .wrapper .box .main .kuang .bottom {
+      width: 150px;
+      height: 50px;
+      background-color: teal;
+      line-height: 50px;
+      text-align: center;
+    }
+
+    .animation {
+      animation: player 0.5s linear alternate infinite;
+    }
+
+    @keyframes player {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
     }
   </style>
   <body>
@@ -90,19 +142,32 @@
             @transitionend="transitionend"
             :class="['ball', 'ball-left', action?'action':'', action?'b1':'']"
           ></div>
-          <div class="content">你是不是饿得慌</div>
+          <div
+            :class="['content', action?'animation':'']"
+            @animationiteration="animationiteration"
+          >
+            {{currentInfo}}
+          </div>
         </div>
         <div class="box light">
           <div
             :class="['ball', 'ball-light', action?'action':'', action?'bl':'']"
           ></div>
-          <div class="main"></div>
+          <div :class="['main', action?'animation':'']">
+            <div class="tab"></div>
+            <div class="vertical-line"></div>
+            <div class="tab"></div>
+            <div class="kuang">
+              <div class="top">{{currentInfo}}</div>
+              <div class="bottom">{{currentInfo}}</div>
+            </div>
+          </div>
         </div>
         <div class="box right">
           <div
             :class="['ball','ball-right' ,action?'action':'', action?'b2':'']"
           ></div>
-          <div class="content">你是不是饿得慌</div>
+          <div :class="['content', action?'animation':'']">{{currentInfo}}</div>
         </div>
         <div class="box hidden">
           <div
@@ -118,14 +183,22 @@
         el: "#root",
         data: {
           action: false,
+          info: ["你是不是饿得慌", "我真的是饿得慌", "滴滴滴滴滴滴滴"],
+          currentIndex: 0,
+          currentInfo: "你是不是饿得慌",
         },
         methods: {
+          animationiteration(e) {
+            // console.log(e.target);
+            this.currentInfo = this.info[this.currentIndex];
+          },
           transitionend(e) {
             this.action = false;
           },
           handlePlayer() {
             console.log("player");
             this.action = true;
+            this.currentIndex = ++this.currentIndex % this.info.length;
           },
         },
       });
